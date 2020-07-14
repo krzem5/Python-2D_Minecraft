@@ -1,0 +1,14 @@
+{
+	"key": {
+		"A": "golden_ingot",
+		"B": "apple"
+	},
+	"receipe": [
+		"AAAABAAAA"
+	],
+	"reward": {
+		"count": 1,
+		"id": "golden_apple"
+	},
+	"type": "crafting_table"
+}

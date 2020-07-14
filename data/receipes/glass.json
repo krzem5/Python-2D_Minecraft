@@ -1,0 +1,8 @@
+{
+	"input": "sand",
+	"reward": {
+		"count": 1,
+		"id": "glass"
+	},
+	"type": "furnace"
+}

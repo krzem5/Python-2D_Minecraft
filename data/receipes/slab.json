@@ -1,0 +1,15 @@
+{
+	"key": {
+		"A": "planks"
+	},
+	"receipe": [
+		"AAA	  ",
+		"   AAA   ",
+		"	  AAA"
+	],
+	"reward": {
+		"count": 3,
+		"id": "slab"
+	},
+	"type": "crafting_table"
+}

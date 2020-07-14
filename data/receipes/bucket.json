@@ -1,0 +1,14 @@
+{
+	"key": {
+		"A": "iron_ingot"
+	},
+	"receipe": [
+		"A A A	",
+		"   A A A "
+	],
+	"reward": {
+		"count": 1,
+		"id": "bucket"
+	},
+	"type": "crafting_table"
+}

@@ -1,0 +1,21 @@
+{
+	"key": {
+		"A": "coal_block"
+	},
+	"receipe": [
+		"A		",
+		" A	   ",
+		"  A	  ",
+		"   A	 ",
+		"	A	",
+		"	 A   ",
+		"	  A  ",
+		"	   A ",
+		"		A"
+	],
+	"reward": {
+		"count": 9,
+		"id": "coal"
+	},
+	"type": "crafting_table"
+}

@@ -1,0 +1,8 @@
+{
+	"input": "iron_ore",
+	"reward": {
+		"count": 1,
+		"id": "iron_ingot"
+	},
+	"type": "furnace"
+}

@@ -1,0 +1,8 @@
+{
+	"input": "gold_ore",
+	"reward": {
+		"count": 1,
+		"id": "golden_ingot"
+	},
+	"type": "furnace"
+}

@@ -1,0 +1,13 @@
+{
+	"key": {
+		"A": "golden_ingot"
+	},
+	"receipe": [
+		"AAAAAAAAA"
+	],
+	"reward": {
+		"count": 1,
+		"id": "gold_block"
+	},
+	"type": "crafting_table"
+}

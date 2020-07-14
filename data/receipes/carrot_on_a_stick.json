@@ -1,0 +1,19 @@
+{
+	"key": {
+		"A": "fishing_rod",
+		"B": "carrot"
+	},
+	"receipe": [
+		"AB	   ",
+		" AB	  ",
+		"   AB	",
+		"	AB   ",
+		"	  AB ",
+		"	   AB"
+	],
+	"reward": {
+		"count": 1,
+		"id": "carrot_on_a_stick"
+	},
+	"type": "crafting_table"
+}

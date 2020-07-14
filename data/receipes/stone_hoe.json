@@ -1,0 +1,15 @@
+{
+	"key": {
+		"A": "cobblestone",
+		"B": "stick"
+	},
+	"receipe": [
+		"AA  B  B ",
+		" AA  B  B"
+	],
+	"reward": {
+		"count": 1,
+		"id": "stone_hoe"
+	},
+	"type": "crafting_table"
+}

@@ -1,0 +1,14 @@
+{
+	"key": {
+		"A": "stick",
+		"B": "string"
+	},
+	"receipe": [
+		"  A ABA B"
+	],
+	"reward": {
+		"count": 1,
+		"id": "fishing_rod"
+	},
+	"type": "crafting_table"
+}

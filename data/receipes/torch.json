@@ -1,0 +1,19 @@
+{
+	"key": {
+		"A": "coal",
+		"B": "stick"
+	},
+	"receipe": [
+		"A  B	 ",
+		" A  B	",
+		"  A  B   ",
+		"   A  B  ",
+		"	A  B ",
+		"	 A  B"
+	],
+	"reward": {
+		"count": 4,
+		"id": "torch"
+	},
+	"type": "crafting_table"
+}

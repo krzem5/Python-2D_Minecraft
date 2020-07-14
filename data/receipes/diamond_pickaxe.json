@@ -1,0 +1,14 @@
+{
+	"key": {
+		"A": "diamond",
+		"B": "stick"
+	},
+	"receipe": [
+		"AAA B  B "
+	],
+	"reward": {
+		"count": 1,
+		"id": "diamond_pickaxe"
+	},
+	"type": "crafting_table"
+}

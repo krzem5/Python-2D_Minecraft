@@ -1,0 +1,21 @@
+{
+	"key": {
+		"A": "log"
+	},
+	"receipe": [
+		"A		",
+		" A	   ",
+		"  A	  ",
+		"   A	 ",
+		"	A	",
+		"	 A   ",
+		"	  A  ",
+		"	   A ",
+		"		A"
+	],
+	"reward": {
+		"count": 4,
+		"id": "planks"
+	},
+	"type": "crafting_table"
+}

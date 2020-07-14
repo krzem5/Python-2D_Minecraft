@@ -1,0 +1,21 @@
+{
+	"key": {
+		"A": "diamond_block"
+	},
+	"receipe": [
+		"A		",
+		" A	   ",
+		"  A	  ",
+		"   A	 ",
+		"	A	",
+		"	 A   ",
+		"	  A  ",
+		"	   A ",
+		"		A"
+	],
+	"reward": {
+		"count": 9,
+		"id": "diamond"
+	},
+	"type": "crafting_table"
+}
