@@ -1,1 +1,5 @@
 ### Github File Push Ignore
+
+saves
+*.py
+!index.py
