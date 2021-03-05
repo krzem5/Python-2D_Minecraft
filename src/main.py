@@ -27,7 +27,7 @@ class Block:
             if not img==None:self.__class__.all_names_add.append(self.n)
         else:
             n=n[1:]
-            for type_ in {'chestL':[('chestL',-1),('shestR',0)],'stairL':[('stairL',-1),('stairLU',1),('stairRU',3),('stairR',0)],'torchL':[('torchL',-1),('torchR',0)],'waterL':[('waterL',-1),('waterR',0),('waterB',[('waterL',-1),('waterL',0)])],'slabD':[('slabD',-1),('slabU',1),('slabR',2),('slabL',4)]}[n]:#flip t-b:1,flip r-l:0,rot 90-2,rot 180-3,rot 270-4
+            for type_ in {'chestL':[('chestL',-1),('chestR',0)],'stairL':[('stairL',-1),('stairLU',1),('stairRU',3),('stairR',0)],'torchL':[('torchL',-1),('torchR',0)],'waterL':[('waterL',-1),('waterR',0),('waterB',[('waterL',-1),('waterL',0)])],'slabD':[('slabD',-1),('slabU',1),('slabR',2),('slabL',4)]}[n]:#flip t-b:1,flip r-l:0,rot 90-2,rot 180-3,rot 270-4
                 if type(type_[1])==list:
                     bg,l=Image.open(f'data\\img\\blocks\\{type_[1][0][0]}.png').convert('RGBA'),[]
                     for tp_ in type_[1][1:]:
