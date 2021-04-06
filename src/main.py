@@ -1,5 +1,5 @@
-from PIL import Image, ImageTk
-from tkinter import *
+from PIL import Image,ImageTk
+import tkinter
 import glob
 import json
 import math
@@ -17,27 +17,32 @@ class Block:
     all_names_add=[]
     def __init__(self,n,img=None):
         if not n.startswith('_'):
-            if img==None:self.img=ImageTk.PhotoImage(Image.open(f'data\\img\\blocks\\{n}.png'))
-            else:self.img=img
+            if img is None:
+                self.img=ImageTk.PhotoImage(Image.open(f'data\\img\\blocks\\{n}.png'))
+            else:
+                self.img=img
             self.n=n
             self.__class__.all_blocks.append(self)
             self.__class__.all_blocks_d[n]=self.img
             self.__class__.all_blocks_img.append(self.img)
             self.__class__.blocks[n]=self
-            if not img==None:self.__class__.all_names_add.append(self.n)
+            if img is not None:self.__class__.all_names_add.append(self.n)
         else:
             n=n[1:]
             for type_ in {'chestL':[('chestL',-1),('chestR',0)],'stairL':[('stairL',-1),('stairLU',1),('stairRU',3),('stairR',0)],'torchL':[('torchL',-1),('torchR',0)],'waterL':[('waterL',-1),('waterR',0),('waterB',[('waterL',-1),('waterL',0)])],'slabD':[('slabD',-1),('slabU',1),('slabR',2),('slabL',4)]}[n]:#flip t-b:1,flip r-l:0,rot 90-2,rot 180-3,rot 270-4
                 if type(type_[1])==list:
                     bg,l=Image.open(f'data\\img\\blocks\\{type_[1][0][0]}.png').convert('RGBA'),[]
                     for tp_ in type_[1][1:]:
-                        if not tp_[1]==-1:l.append(Image.open(f'data\\img\\blocks\\{tp_[0]}.png').convert('RGBA').transpose(tp_[1]))
+                        if tp_[1]!=-1:l.append(Image.open(f'data\\img\\blocks\\{tp_[0]}.png').convert('RGBA').transpose(tp_[1]))
                         else:l.append(Image.open(f'data\\img\\blocks\\{tp_[0]}.png').convert('RGBA'))
                     for img in l:bg=Image.alpha_composite(bg,img)
                     Block(type_[0],img=ImageTk.PhotoImage(bg))
-                elif not type_[1]==-1:Block(type_[0],img=ImageTk.PhotoImage(Image.open(f'data\\img\\blocks\\{n}.png').transpose(type_[1])))
-                else:Block(type_[0],img=ImageTk.PhotoImage(Image.open(f'data\\img\\blocks\\{n}.png')))
-    def get(self):return self.img
+                elif type_[1]!=-1:
+                    Block(type_[0],img=ImageTk.PhotoImage(Image.open(f'data\\img\\blocks\\{n}.png').transpose(type_[1])))
+                else:
+                    Block(type_[0],img=ImageTk.PhotoImage(Image.open(f'data\\img\\blocks\\{n}.png')))
+    def get(self):
+        return self.img
 class Item:
     all_items=[]
     all_items_d={}
@@ -259,7 +264,7 @@ class Generation:
         eb,txt,c,r=(col*row)-len(text),['']*col,0,0
         for symbol in text:
             txt[c],c=txt[c]+symbol,c+1
-            if(c==col)or(c==col-1 and r>=row-eb):c,r=0,r+1
+            if ((c==col) or (c==col-1 and r>=row-eb)):c,r=0,r+1
         return ''.join(txt)
     def encrypt(self,text):
         key=random.randint(round(len(text)/3),round(len(text)/3*2))
@@ -308,7 +313,7 @@ class Generation:
     def _start_time(self):self.stop_time=False
     def get(self):return self.map,self.wb,self.sb,self.gb,self.tb
     def format_metadata(self,metadata):
-        if metadata==None:return '-'
+        if metadata is None:return '-'
     def save(self,gm):
         with open(f'saves/{gm.file_name}.world','w') as f:
             txt=''
@@ -330,8 +335,10 @@ class Generation:
             f.write(self.encrypt(txt))
     def clear(self):self.fill((0,0),(37,21),'air')
     def proces_str_n(self,n):
-        if n<2:return '  '
-        elif 1<n<10:return f' {n}'
+        if n<2:
+            return '  '
+        if 1<n<10:
+            return f' {n}'
         else:return str(n)
 class GUI:
     def __init__(self,cnv,gm):self.cnv,self.game,self.open,self.gui_textures,self.itm_bg_texture,self.bg_shade,self.blk_gui_textures,self.gui_itembar,self.left_click,self.right_click,self.mouse,self.itembar,self.inventory,self.gui_item,self.l_click,self.itm,self.blk_n_gui_textures,self.loaded=cnv,gm,False,[],gm.inv.img,gm.gen.shader.sh_l[4],{},[],False,False,[-1,-1],[None]*9,{},[],False,['air',0,[None,None],['bar',0]],{},False
@@ -401,7 +408,7 @@ class GUI:
                     self.cnv.itemconfig(self.blk_gui_textures[(self.mouse[0]//50,self.mouse[1]//50)],image=Item.all_items[Item.all_names.index('air')].img)
                     self.cnv.itemconfig(self.blk_n_gui_textures[(self.mouse[0]//50,self.mouse[1]//50)],text=self.game.gen.proces_str_n(0))
                     self.gui_items[(self.mouse[0]//50-14,self.mouse[1]//50-3)]=['air',0]
-            if self.itm[2][0]==None:self.itm[2]=[self.cnv.create_image(0,0,image=Item.all_items[Item.all_names.index(self.itm[0])].img,anchor='nw'),self.cnv.create_text(0,0,text=self.game.gen.proces_str_n(self.itm[1]),anchor='nw',fill='#0C0C0C',font=('Tempus Sans ITC',10))]
+            if self.itm[2][0] is None:self.itm[2]=[self.cnv.create_image(0,0,image=Item.all_items[Item.all_names.index(self.itm[0])].img,anchor='nw'),self.cnv.create_text(0,0,text=self.game.gen.proces_str_n(self.itm[1]),anchor='nw',fill='#0C0C0C',font=('Tempus Sans ITC',10))]
             if self.cnv.coords(self.itm[2][0])!=[self.mouse[0]-15,self.mouse[1]-15]:self.cnv.move(self.itm[2][0],self.mouse[0]-15-self.cnv.coords(self.itm[2][0])[0],self.mouse[1]-15-self.cnv.coords(self.itm[2][0])[1])
             if self.cnv.coords(self.itm[2][1])!=[self.mouse[0]+5,self.mouse[1]+5]:self.cnv.move(self.itm[2][1],self.mouse[0]+5-self.cnv.coords(self.itm[2][1])[0],self.mouse[1]+5-self.cnv.coords(self.itm[2][1])[1])
             self.l_click=True
@@ -441,14 +448,14 @@ class GUI:
             self.l_click=False
 class Game:
     def __init__(self):
-        self.tk=Tk()
+        self.tk=tkinter.Tk()
         self.tk.title('2D')
         self.tk['background']='black'
         self.tk.resizable(0,0)
         self.tk.minsize(width=100,height=100)
         self.tk.geometry('1910x1030+-5+-25')
-        self.cv_fr=Frame(self.tk,bg='black')
-        self.canvas=Canvas(self.cv_fr,bg='#00B2EE',width=10,height=10,borderwidth=0,highlightbackgroun='black',highlightthickness=0,highlightcolor='black')#'#00B2EE';'#000000'
+        self.cv_fr=tkinter.Frame(self.tk,bg='black')
+        self.canvas=tkinter.Canvas(self.cv_fr,bg='#00B2EE',width=10,height=10,borderwidth=0,highlightbackgroun='black',highlightthickness=0,highlightcolor='black')#'#00B2EE';'#000000'
         self.cv_fr.grid(row=0,column=0)
         self.canvas.grid(row=0,column=0)
         self.canvas['height']=1020
@@ -509,8 +516,7 @@ class Game:
         Item.all_items[Item.all_names.index('chocolate')].eat_time=1.1
         Item.all_items[Item.all_names.index('golden_apple')].eat_time=1.4
         Item.all_items[Item.all_names.index('enchanted_golden_apple')].eat_time=1.4
-        self.destr_stages,self.sl_frame,self.blk_break_map,self.breaking_tm,self.looking_marker_img,self.bounding_box,self.heart_img,self.heart_objs,self.food_img,self.food_objs,self.old_hp,self.old_food,self.tm_hp_regen,self.last_tm_hp_reg,self.regen_rm_food,self.tm_food_rm,self.last_tm_food_rm,self.tm_damage_hunger,self.last_tm_damage_hunger,self.eating,self.eating_object,self.chocolate_hunger,self.golden_apple_boost,self.golden_apple_boost_tm,self.enchanted_golden_apple_boost,self.enchanted_golden_apple_boost_tm,self.file_name,self.use_left_click,self.use_right_click=\
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           [Image.open(f'data\\img\\misc\\destroy_{n}.png') for n in range(1,9)],ImageTk.PhotoImage(Image.open(f'data\\img\\misc\\selected.png')),{'normal':[(0,0,50,50)],'stairL':[(0,0,25,25),(0,25,50,25)],'stairR':[(25,0,25,25),(0,25,50,25)],'torch':[(20,8,11,12),(20,20,11,30)],'torchL':[(3,8,11,12),(3,20,11,25),(0,22,3,3),(0,40,3,3)],'torchR':[(36,8,11,12),(36,20,11,25),(47,22,3,3),(47,40,3,3)],'farmland':[(0,7,50,43)],'unwatered_farmland':[(0,7,50,43)],'grass':[(1,5,46,45)]},{'normal':0.1,'grass':0.06},Image.open('data\\img\\misc\\selected.png'),{'normal':(0,0,50,50),'torch':(20,8,11,42),'torchL':(3,8,11,37),'torchR':(36,8,11,37),'farmland':(0,7,50,43),'unwatered_farmland':(0,7,50,43),'air':(0,0,1,1),'grass':(1,5,46,45)},{1:ImageTk.PhotoImage(Image.open('data\\img\\misc\\heart.png')),0.5:ImageTk.PhotoImage(Image.open('data\\img\\misc\\half_heart.png')),0:ImageTk.PhotoImage(Image.open('data\\img\\misc\\empty_heart.png')),3:ImageTk.PhotoImage(Image.open('data\\img\\misc\\heart_gold.png')),2.5:ImageTk.PhotoImage(Image.open('data\\img\\misc\\half_heart_gold.png')),2:ImageTk.PhotoImage(Image.open('data\\img\\misc\\empty_heart_gold.png'))},[],{1:ImageTk.PhotoImage(Image.open('data\\img\\misc\\food.png')),0.5:ImageTk.PhotoImage(Image.open('data\\img\\misc\\half_food.png')),0:ImageTk.PhotoImage(Image.open('data\\img\\misc\\empty_food.png')),3:ImageTk.PhotoImage(Image.open('data\\img\\misc\\food_gold.png')),2.5:ImageTk.PhotoImage(Image.open('data\\img\\misc\\half_food_gold.png')),2:ImageTk.PhotoImage(Image.open('data\\img\\misc\\empty_food_gold.png'))},[],0,0,None,time.time(),0,None,time.time(),None,time.time(),False,[None,None],[],0,0,0,0,'test',False,False
+        self.destr_stages,self.sl_frame,self.blk_break_map,self.breaking_tm,self.looking_marker_img,self.bounding_box,self.heart_img,self.heart_objs,self.food_img,self.food_objs,self.old_hp,self.old_food,self.tm_hp_regen,self.last_tm_hp_reg,self.regen_rm_food,self.tm_food_rm,self.last_tm_food_rm,self.tm_damage_hunger,self.last_tm_damage_hunger,self.eating,self.eating_object,self.chocolate_hunger,self.golden_apple_boost,self.golden_apple_boost_tm,self.enchanted_golden_apple_boost,self.enchanted_golden_apple_boost_tm,self.file_name,self.use_left_click,self.use_right_click=[Image.open(f'data\\img\\misc\\destroy_{n}.png') for n in range(1,9)],ImageTk.PhotoImage(Image.open(f'data\\img\\misc\\selected.png')),{'normal':[(0,0,50,50)],'stairL':[(0,0,25,25),(0,25,50,25)],'stairR':[(25,0,25,25),(0,25,50,25)],'torch':[(20,8,11,12),(20,20,11,30)],'torchL':[(3,8,11,12),(3,20,11,25),(0,22,3,3),(0,40,3,3)],'torchR':[(36,8,11,12),(36,20,11,25),(47,22,3,3),(47,40,3,3)],'farmland':[(0,7,50,43)],'unwatered_farmland':[(0,7,50,43)],'grass':[(1,5,46,45)]},{'normal':0.1,'grass':0.06},Image.open('data\\img\\misc\\selected.png'),{'normal':(0,0,50,50),'torch':(20,8,11,42),'torchL':(3,8,11,37),'torchR':(36,8,11,37),'farmland':(0,7,50,43),'unwatered_farmland':(0,7,50,43),'air':(0,0,1,1),'grass':(1,5,46,45)},{1:ImageTk.PhotoImage(Image.open('data\\img\\misc\\heart.png')),0.5:ImageTk.PhotoImage(Image.open('data\\img\\misc\\half_heart.png')),0:ImageTk.PhotoImage(Image.open('data\\img\\misc\\empty_heart.png')),3:ImageTk.PhotoImage(Image.open('data\\img\\misc\\heart_gold.png')),2.5:ImageTk.PhotoImage(Image.open('data\\img\\misc\\half_heart_gold.png')),2:ImageTk.PhotoImage(Image.open('data\\img\\misc\\empty_heart_gold.png'))},[],{1:ImageTk.PhotoImage(Image.open('data\\img\\misc\\food.png')),0.5:ImageTk.PhotoImage(Image.open('data\\img\\misc\\half_food.png')),0:ImageTk.PhotoImage(Image.open('data\\img\\misc\\empty_food.png')),3:ImageTk.PhotoImage(Image.open('data\\img\\misc\\food_gold.png')),2.5:ImageTk.PhotoImage(Image.open('data\\img\\misc\\half_food_gold.png')),2:ImageTk.PhotoImage(Image.open('data\\img\\misc\\empty_food_gold.png'))},[],0,0,None,time.time(),0,None,time.time(),None,time.time(),False,[None,None],[],0,0,0,0,'test',False,False
         self.looking_block,self.breaking_block,self.is_breaking_block=[-1,-1],[None],False
         self.player=Player(self.canvas,self)
         self.receipes()
@@ -625,7 +631,7 @@ class Game:
                 elif r['type']=='furnace':self.receipes_f.append([r['input'],r['reward']])
     def start(self):
         for wb in self.water_blocks:
-            if not (wb[0],wb[1]) in self.l_update_wb_.keys():self.l_update_wb_[(wb[0],wb[1])]=-1
+            if (wb[0],wb[1]) not in self.l_update_wb_.keys():self.l_update_wb_[(wb[0],wb[1])]=-1
             self.l_update_wb_[(wb[0],wb[1])]=self.l_update_wb_[(wb[0],wb[1])]+1
             if self.l_update_wb_[(wb[0],wb[1])]==10:
                 self.l_update_wb_[(wb[0],wb[1])]=0
@@ -649,7 +655,7 @@ class Game:
                         self.gen.img_('air',s_[0],s_[1])
         self.map,self.water_blocks,self.sand_blocks,self.gravel_blocks,self.torch_blocks=self.gen.get()
         for wb in self.water_blocks:
-            if not (wb[0],wb[1]) in self.l_update_wb.keys():self.l_update_wb[(wb[0],wb[1])]=-1
+            if (wb[0],wb[1]) not in self.l_update_wb.keys():self.l_update_wb[(wb[0],wb[1])]=-1
             self.l_update_wb[(wb[0],wb[1])]=self.l_update_wb[(wb[0],wb[1])]+1
             if self.l_update_wb[(wb[0],wb[1])]==3:
                 self.l_update_wb[(wb[0],wb[1])]=0
@@ -657,7 +663,7 @@ class Game:
                 if -1<s_[0]<37 and -1<s_[1]<21:
                     if self.map[s_] in ['air','torch','torchR','torchL']:
                         self.gen.img_('water',s_[0],s_[1])
-                        if not s_ in self.l_blk_parents_wb.keys():self.l_blk_parents_wb[s_]=[]
+                        if s_ not in self.l_blk_parents_wb.keys():self.l_blk_parents_wb[s_]=[]
                         self.l_blk_parents_wb[s_].append((s_[0],s_[1]-1))
                     if self.map[s_] not in ['water','waterB','air']:
                         d=[(1,0),(-1,0)]
@@ -671,27 +677,30 @@ class Game:
                                     try:
                                         if self.map[s__]=='water' and d_==d[1] and self.map[tuple([s[0]-1,s[1]+1])] in ['air','water']:
                                             self.gen.img_('waterL',s_[0],s_[1])
-                                            if not s_ in self.l_blk_parents_wb.keys():self.l_blk_parents_wb[s_]=[]
+                                            if s_ not in self.l_blk_parents_wb.keys():self.l_blk_parents_wb[s_]=[]
                                             self.l_blk_parents_wb[s_].append((s_[0]+1,s_[1]))
-                                        else:p+=1
-                                    except:
+                                        else:
+                                            p+=1
+                                    except BaseException:
                                         p+=1
                                     try:
                                         if self.map[s__]=='water' and d_==d[0] and self.map[tuple([s[0]+1,s[1]+1])] in ['air','water']:
                                             self.gen.img_('waterR',s_[0],s_[1])
-                                            if not s_ in self.l_blk_parents_wb.keys():self.l_blk_parents_wb[s_]=[]
+                                            if s_ not in self.l_blk_parents_wb.keys():self.l_blk_parents_wb[s_]=[]
                                             self.l_blk_parents_wb[s_].append((s_[0]-1,s_[1]))
-                                        else:p+=1
-                                    except:
+                                        else:
+                                            p+=1
+                                    except BaseException:
                                         p+=1
                                     try:
                                         if self.map[s__]=='water' and ((d_==d[0] and self.map[tuple([s[0]+2,s[1]])]=='water' and self.map[tuple([s[0]+1,s[1]+1])] in ['air','water']) or (d_==d[1] and self.map[tuple([s[0]-2,s[1]])]=='water' and self.map[tuple([s[0]-1,s[1]+1])] in ['air','water'])):
                                             self.gen.img_('waterB',s_[0],s_[1])
-                                            if not s_ in self.l_blk_parents_wb.keys():self.l_blk_parents_wb[s_]=[]
+                                            if s_ not in self.l_blk_parents_wb.keys():self.l_blk_parents_wb[s_]=[]
                                             self.l_blk_parents_wb[s_].append((s_[0]+1,s_[1]))
                                             self.l_blk_parents_wb[s_].append((s_[0]-1,s_[1]))
-                                        else:p+=1
-                                    except:
+                                        else:
+                                            p+=1
+                                    except BaseException:
                                         p+=1
                                     if p==3:self.gen.img_('water',s_[0],s_[1])
         self.map,self.water_blocks,self.sand_blocks,self.gravel_blocks,self.torch_blocks=self.gen.get()
@@ -729,7 +738,7 @@ class Game:
             elif self.map[tuple(tb)]=='torchL' and self.map[(tb[0]-1,tb[1])] in ['air','torchR','torchL','torch','water','waterR','waterL','waterB']:self.gen.img_('air',tb[0],tb[1])
         self.map,self.water_blocks,self.sand_blocks,self.gravel_blocks,self.torch_blocks=self.gen.get()
         if self.is_breaking_block and -1<self.looking_block[0]<37 and -1<self.looking_block[1]<21:
-            if not self.map[tuple(self.looking_block)]=='air':
+            if self.map[tuple(self.looking_block)]!='air':
                 def destroy(blk):
                     if self.map[tuple(blk[0])] in list(self.blk_break_map.keys()):l=self.blk_break_map[self.map[tuple(blk[0])]]
                     else:l=self.blk_break_map['normal']
@@ -744,7 +753,7 @@ class Game:
                         self.tk.update_idletasks()
                     blk[3]=0
                     return blk
-                if self.breaking_block[0]==None or self.breaking_block[0]!=self.looking_block:
+                if self.breaking_block[0] is None or self.breaking_block[0]!=self.looking_block:
                     self.breaking_block=[self.looking_block,1,[],0,[]]
                     self.breaking_block=destroy(self.breaking_block)
                 else:
@@ -814,14 +823,14 @@ class Game:
                     half=True
                 else:self.food_objs.append(self.canvas.create_image(37*50+25,y_pos,image=self.food_img[food_color],anchor='nw'))
                 y_pos-=25
-        if self.player.food>9 and self.player.hp<10 and self.tm_hp_regen==None:self.tm_hp_regen=random.randint(25,65)/10
-        if self.player.food>9 and self.player.hp<10 and self.last_tm_hp_reg+self.tm_hp_regen<=time.time() and not self.tm_hp_regen==None:self.player.hp,self.tm_hp_regen,self.last_tm_hp_reg,self.player.food=self.player.hp+random.choice([0.5,1]),None,time.time(),self.player.food-random.choice([0,0,0,0,0.5])
-        if self.player.food>0 and self.tm_food_rm==None:self.tm_food_rm=random.randint(60,120)
-        if self.player.food>0 and self.last_tm_food_rm+self.tm_food_rm<=time.time() and not self.tm_food_rm==None:self.player.food,self.tm_food_rm,self.last_tm_food_rm=self.player.food-0.5,None,time.time()
+        if self.player.food>9 and self.player.hp<10 and self.tm_hp_regen is None:self.tm_hp_regen=random.randint(25,65)/10
+        if self.player.food>9 and self.player.hp<10 and self.last_tm_hp_reg+self.tm_hp_regen<=time.time() and not self.tm_hp_regen is None:self.player.hp,self.tm_hp_regen,self.last_tm_hp_reg,self.player.food=self.player.hp+random.choice([0.5,1]),None,time.time(),self.player.food-random.choice([0,0,0,0,0.5])
+        if self.player.food>0 and self.tm_food_rm is None:self.tm_food_rm=random.randint(60,120)
+        if self.player.food>0 and self.last_tm_food_rm+self.tm_food_rm<=time.time() and not self.tm_food_rm is None:self.player.food,self.tm_food_rm,self.last_tm_food_rm=self.player.food-0.5,None,time.time()
         if self.player.food==0.5 and self.player.hp>0:self.tm_damage_hunger=random.randint(5,35)/10
-        if self.player.food==0.5 and self.player.hp>0 and self.last_tm_damage_hunger+self.tm_damage_hunger<=time.time() and not self.tm_damage_hunger==None:self.player.hp,self.tm_damage_hunger,self.last_tm_damage_hunger=self.player.hp-random.choice([0.5,0.5,1]),None,time.time()
+        if self.player.food==0.5 and self.player.hp>0 and self.last_tm_damage_hunger+self.tm_damage_hunger<=time.time() and not self.tm_damage_hunger is None:self.player.hp,self.tm_damage_hunger,self.last_tm_damage_hunger=self.player.hp-random.choice([0.5,0.5,1]),None,time.time()
         if self.player.food==0 and self.player.hp>0:self.tm_damage_hunger=random.randint(5,35)/33
-        if self.player.food==0 and self.player.hp>0 and self.last_tm_damage_hunger+self.tm_damage_hunger<=time.time() and not self.tm_damage_hunger==None:self.player.hp,self.tm_damage_hunger,self.last_tm_damage_hunger=self.player.hp-random.choice([1,1.5]),None,time.time()
+        if self.player.food==0 and self.player.hp>0 and self.last_tm_damage_hunger+self.tm_damage_hunger<=time.time() and not self.tm_damage_hunger is None:self.player.hp,self.tm_damage_hunger,self.last_tm_damage_hunger=self.player.hp-random.choice([1,1.5]),None,time.time()
         if (self.eating_object!=[None,None] or self.eating_object[0]!=self.inv.itembar[self.inv.s_slot-1][0]) and not self.eating:self.eating_object=[None,None]
         if self.eating:
             if self.eating_object==[None,None]:self.eating_object=[self.inv.itembar[self.inv.s_slot-1][0],time.time()+Item.all_items[Item.all_names.index(self.inv.itembar[self.inv.s_slot-1][0])].eat_time]
@@ -849,7 +858,7 @@ class Game:
             for itm in self.gen.items:
                 if -1<itm[3][0]//50<37 and -1<itm[3][1]//50<21:
                     if itm[2]==0 and itm[4]!=None:itm_rm_list_idx.append(itm)
-                    if itm[4]==None:itm[4],itm[2]=self.canvas.create_image(itm[3][0],itm[3][1],image=Item.all_items[Item.all_names.index(itm[0])].img,anchor='s'),120
+                    if itm[4] is None:itm[4],itm[2]=self.canvas.create_image(itm[3][0],itm[3][1],image=Item.all_items[Item.all_names.index(itm[0])].img,anchor='s'),120
                     if self.map[(itm[3][0]//50,itm[3][1]//50)]=='air' or itm[5][0]=='air':itm[5][0],itm[3][1],itm[5][1],_='air',itm[3][1]+5,itm[5][1]+5,self.canvas.move(itm[4],0,5)
                     elif (self.map[(itm[3][0]//50,itm[3][1]//50)]=='slabD' or itm[5][0]=='slabD') and itm[5][1]<25:itm[5][0],itm[3][1],itm[5][1],_='slabD',itm[3][1]+5,itm[5][1]+5,self.canvas.move(itm[4],0,5)
                     if itm[5][0]=='air' and itm[5][1]>=50:itm[5]=['',0]

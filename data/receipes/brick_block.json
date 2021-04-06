@@ -3,10 +3,10 @@
 		"A": "brick"
 	},
 	"receipe": [
-		"AA AA	",
+		"AA AA    ",
 		" AA AA   ",
 		"   AA AA ",
-		"	AA AA"
+		"    AA AA"
 	],
 	"reward": {
 		"count": 1,
