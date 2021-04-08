@@ -314,6 +314,7 @@ class Generation:
     def get(self):return self.map,self.wb,self.sb,self.gb,self.tb
     def format_metadata(self,metadata):
         if metadata is None:return '-'
+        return 'AAAAAA'
     def save(self,gm):
         with open(f'saves/{gm.file_name}.world','w') as f:
             txt=''
@@ -337,7 +338,7 @@ class Generation:
     def proces_str_n(self,n):
         if n<2:
             return '  '
-        if 1<n<10:
+        if n<10:
             return f' {n}'
         else:return str(n)
 class GUI:
